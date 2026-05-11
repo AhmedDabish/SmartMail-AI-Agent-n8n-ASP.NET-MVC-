@@ -58,9 +58,9 @@ public class HomeController : Controller
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await client.PostAsync(
-            "http://localhost:5678/webhook/summarize-email",
-            content
-        );
+    "https://ahmeddabish.app.n8n.cloud/webhook/summarize-email",
+    content
+);
 
         var result = await response.Content.ReadAsStringAsync();
 

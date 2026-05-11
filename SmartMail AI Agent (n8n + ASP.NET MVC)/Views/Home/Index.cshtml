@@ -1,102 +1,498 @@
-﻿@* @{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div> *@
-
+﻿
 @{
     ViewData["Title"] = "AI Email Summarizer";
 }
 
-<style>
-    body {
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        color: white;
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    .glass {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+        content: '';
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        animation: particleFloat 15s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @@keyframes particleFloat {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -30px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    .main-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .content-wrapper {
+        width: 100%;
+        max-width: 900px;
+    }
+
+    /* Header Section */
+    .header-section {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    @@keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 40px rgba(240, 147, 251, 0.4);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @@keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .logo svg {
+        width: 45px;
+        height: 45px;
+        fill: white;
+    }
+
+    .main-title {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        letter-spacing: -1px;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+    }
+
+    /* Glass Card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 50px;
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Form Elements */
+    .form-label {
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    textarea.form-control {
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 20px;
+        font-size: 1rem;
+        color: #333;
+        resize: none;
+        height: 220px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea.form-control:focus {
+        outline: none;
+        border-color: #f093fb;
+        background: white;
+        box-shadow: 0 8px 30px rgba(240, 147, 251, 0.3);
+        transform: translateY(-2px);
+    }
+
+    textarea.form-control::placeholder {
+        color: #999;
+    }
+
+    /* Character Counter */
+    .char-counter {
+        position: absolute;
+        bottom: 15px;
+        right: 20px;
+        color: #666;
+        font-size: 0.85rem;
+        pointer-events: none;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 15px;
+        padding: 18px 40px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-submit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-submit:hover::before {
+        left: 100%;
+    }
+
+    .btn-submit:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Loader */
+    .loader-container {
+        text-align: center;
+        padding: 30px;
+        margin-top: 20px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .loader-spinner {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 15px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    /* Result Box */
+    .result-box {
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
         padding: 30px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        margin-top: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.5s ease-out;
     }
 
-    textarea {
-        height: 200px;
-        resize: none;
-        border-radius: 12px !important;
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .btn-custom {
-        background: linear-gradient(45deg, #6366f1, #22c55e);
-        border: none;
-        padding: 12px 30px;
-        border-radius: 12px;
+    .result-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .result-icon {
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: white;
-        font-weight: bold;
-        transition: 0.3s;
+        font-size: 1.2rem;
     }
 
-    .btn-custom:hover {
-        transform: scale(1.05);
+    .result-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
     }
 
-    .result-box {
-        background: rgba(255,255,255,0.08);
-        padding: 20px;
-        border-radius: 15px;
-        margin-top: 20px;
+    .result-content {
+        color: #444;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 
-    .title {
-        font-size: 32px;
-        font-weight: bold;
+    /* Copy Button */
+    .copy-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
-</style>
+    .copy-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
 
-<div class="container mt-5">
-
-    <div class="text-center mb-4">
-        <h1 class="title">📧 AI Email Summarizer</h1>
-        <p>Paste your email and let AI summarize it instantly</p>
-    </div>
-
-    <div class="glass">
-
-        <form method="post" id="form">
-            <textarea class="form-control mb-3" name="email" placeholder="Paste your email here..."></textarea>
-
-            <button class="btn btn-custom w-100" type="submit">
-                ✨ Summarize Email
-            </button>
-        </form>
-
-        <div id="loader" class="text-center mt-3" style="display:none;">
-            <div class="spinner-border text-success"></div>
-            <p>AI is thinking...</p>
-        </div>
-
-        @if (ViewBag.Result != null)
-        {
-            <div class="result-box mt-4">
-                <h4>📌 Summary:</h4>
-                <pre style="white-space: pre-wrap;">@ViewBag.Result</pre>
-            </div>
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .glass-card {
+            padding: 30px 20px;
+            border-radius: 20px;
         }
 
+        .main-title {
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+            height: 180px;
+            padding: 15px;
+        }
+
+        .btn-submit {
+            padding: 15px 30px;
+            font-size: 1rem;
+        }
+    }
+
+    /* Success Animation */
+    @@keyframes successPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .success-animate {
+        animation: successPulse 0.6s ease;
+    }
+</style>
+
+<div class="main-container">
+    <div class="content-wrapper">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </div>
+            <h1 class="main-title">AI Email Summarizer</h1>
+            <p class="subtitle">Transform lengthy emails into concise summaries instantly</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-card">
+            <form method="post" id="emailForm">
+                <div class="input-wrapper">
+                    <label class="form-label">
+                        <span>📧</span> Paste Your Email
+                    </label>
+                    <textarea 
+                        class="form-control" 
+                        name="email" 
+                        id="emailInput"
+                        placeholder="Paste your email content here and let AI do the magic..."
+                        required
+                        maxlength="5000"></textarea>
+                    <span class="char-counter" id="charCounter">0 / 5000</span>
+                </div>
+
+                <button class="btn-submit" type="submit" id="submitBtn">
+                    <span id="btnText">✨ Summarize Now</span>
+                </button>
+            </form>
+
+            <!-- Loader -->
+            <div id="loader" class="loader-container" style="display:none;">
+                <div class="loader-spinner"></div>
+                <p class="loader-text">AI is analyzing your email...</p>
+            </div>
+
+            <!-- Result Box -->
+            @if (ViewBag.Result != null)
+            {
+                <div class="result-box" id="resultBox">
+                    <div class="result-header">
+                        <div class="result-icon">✓</div>
+                        <h3 class="result-title">Summary</h3>
+                    </div>
+                    <div class="result-content">@ViewBag.Result</div>
+                    <button class="copy-btn" onclick="copySummary()">
+                        <span>📋</span> Copy Summary
+                    </button>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
 <script>
-    const form = document.getElementById("form");
-    const loader = document.getElementById("loader");
+    // Character Counter
+    const emailInput = document.getElementById('emailInput');
+    const charCounter = document.getElementById('charCounter');
 
-    form.addEventListener("submit", function () {
-        loader.style.display = "block";
+    emailInput.addEventListener('input', function() {
+        const length = this.value.length;
+        charCounter.textContent = `${length} / 5000`;
+    });
+
+    // Form Submit Handler
+    const form = document.getElementById('emailForm');
+    const loader = document.getElementById('loader');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+
+    form.addEventListener('submit', function() {
+        loader.style.display = 'block';
+        submitBtn.disabled = true;
+        btnText.textContent = '⏳ Processing...';
+    });
+
+    // Copy Summary Function
+    function copySummary() {
+        const resultContent = document.querySelector('.result-content');
+        const text = resultContent.textContent;
+        
+        navigator.clipboard.writeText(text).then(function() {
+            const copyBtn = document.querySelector('.copy-btn');
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<span>✓</span> Copied!';
+            copyBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            
+            setTimeout(function() {
+                copyBtn.innerHTML = originalHTML;
+                copyBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }, 2000);
+        });
+    }
+
+    // Add success animation when result appears
+    window.addEventListener('load', function() {
+        const resultBox = document.getElementById('resultBox');
+        if (resultBox) {
+            resultBox.classList.add('success-animate');
+        }
+    });
+
+    // Auto-resize textarea
+    emailInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 400) + 'px';
     });
 </script>
