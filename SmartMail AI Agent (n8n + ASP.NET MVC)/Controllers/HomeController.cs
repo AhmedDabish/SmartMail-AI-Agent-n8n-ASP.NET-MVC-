@@ -1,37 +1,4 @@
-//using System.Diagnostics;
-//using Microsoft.AspNetCore.Mvc;
-//using SmartMail_AI_Agent__n8n___ASP.NET_MVC_.Models;
-
-//namespace SmartMail_AI_Agent__n8n___ASP.NET_MVC_.Controllers
-//{
-//    public class HomeController : Controller
-//    {
-//        private readonly ILogger<HomeController> _logger;
-
-//        public HomeController(ILogger<HomeController> logger)
-//        {
-//            _logger = logger;
-//        }
-
-//        public IActionResult Index()
-//        {
-//            return View();
-//        }
-
-//        public IActionResult Privacy()
-//        {
-//            return View();
-//        }
-
-//        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-//        public IActionResult Error()
-//        {
-//            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-//        }
-//    }
-//}
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
 
@@ -48,24 +15,46 @@ public class HomeController : Controller
     {
         using var client = new HttpClient();
 
-        var data = new
-        {
-            email = email
-        };
-
+        var data = new { email };
         var json = JsonSerializer.Serialize(data);
-
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await client.PostAsync(
-    "https://ahmeddabish.app.n8n.cloud/webhook/summarize-email",
-    content
-);
+            "https://ahmeddabish.app.n8n.cloud/webhook/summarize-email",
+            content
+        );
 
         var result = await response.Content.ReadAsStringAsync();
 
-        ViewBag.Result = result;
+        string summaryText = "";
 
+        try
+        {
+            using JsonDocument doc = JsonDocument.Parse(result);
+            summaryText = doc.RootElement[0]
+                .GetProperty("content")[0]
+                .GetProperty("text")
+                .GetString();
+        }
+        catch
+        {
+            summaryText = result;
+        }
+
+        // تنظيف النص
+        summaryText = summaryText
+            .Replace("\\n", "\n")
+            .Replace("\r", "")
+            .Trim();
+
+        // إذا كان الطلب AJAX، نعيد JSON
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            return Ok(new { summary = summaryText });
+        }
+
+        // 아니면 عادي
+        ViewBag.Result = summaryText;
         return View();
     }
 }

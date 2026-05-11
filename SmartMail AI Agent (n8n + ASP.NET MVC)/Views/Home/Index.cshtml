@@ -1,498 +1,476 @@
-﻿
+﻿       
 @{
-    ViewData["Title"] = "AI Email Summarizer";
+    ViewData["Title"] = "AI Email Summarizer | Pro Dark Edition";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #05070f;
+            background-image: radial-gradient(circle at 15% 30%, rgba(20, 25, 55, 0.6) 0%, #03050b 95%);
+            min-height: 100vh;
+            color: #eef2ff;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        button, .copy-btn-sleek, .btn-neon, .badge-dark-glow, .lux-card, .result-dark-card {
+            cursor: pointer;
+        }
+        textarea, input {
+            cursor: text;
+            caret-color: #22c55e;
+        }
+        button:active, .btn-neon:active {
+            cursor: wait;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(60, 70, 120, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(60, 70, 120, 0.1) 1px, transparent 1px);
+            background-size: 48px 48px;
+            z-index: -2;
+            pointer-events: none;
+            animation: gridPulse 8s infinite alternate;
+        }
+
+        @@keyframes gridPulse {
+            0% { opacity: 0.4; background-size: 48px 48px; }
+            100% { opacity: 0.8; background-size: 52px 52px; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 40%, rgba(255,255,210,0.06) 1px, transparent 1px);
+            background-size: 70px 70px;
+            z-index: -1;
+            animation: starDrift 55s linear infinite;
+            pointer-events: none;
+        }
+
+        @@keyframes starDrift {
+            0% { background-position: 0 0; }
+            100% { background-position: 180px 180px; }
+        }
+
+        .lux-card {
+            background: rgba(8, 12, 24, 0.7);
+            backdrop-filter: blur(18px);
+            border-radius: 2rem;
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.8), 0 0 0 0.5px rgba(72, 187, 120, 0.2) inset;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transform: translateY(0);
+        }
+
+        .lux-card:hover {
+            border-color: rgba(72, 187, 120, 0.7);
+            box-shadow: 0 40px 70px -18px #000000cc;
+            transform: translateY(-6px) scale(1.01);
+        }
+
+        .premium-gradient {
+            font-weight: 800;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #E6FFE9, #88F7A8, #A5F0C0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        .premium-gradient:hover {
+            transform: scale(1.02);
+            text-shadow: 0 0 12px rgba(34,197,94,0.3);
+        }
+
+        .badge-dark-glow {
+            background: rgba(34, 197, 94, 0.15);
+            backdrop-filter: blur(4px);
+            border-radius: 50px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 0.5px solid rgba(52, 211, 153, 0.4);
+            color: #b0f0c8;
+            transition: all 0.25s;
+        }
+        .badge-dark-glow:hover {
+            transform: translateY(-2px) scale(1.05);
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #34d399;
+            box-shadow: 0 0 12px rgba(52,211,153,0.4);
+        }
+/* premium textarea - font white + green caret + fix white bg on focus */
+.premium-textarea {
+    background: #03060e !important;
+    background-color: #03060e !important;
+    border: 1px solid #1f2a42;
+    border-radius: 1.5rem;
+    padding: 1.2rem 1.5rem;
+    color: #FFFFFF !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    resize: vertical;
+    caret-color: #22c55e;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
-<style type="text/css">
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+.premium-textarea:focus {
+    outline: none;
+    border-color: #34d399;
+    background: #02040a !important;
+    background-color: #02040a !important;
+    box-shadow: 0 0 0 5px rgba(52, 211, 153, 0.25);
+    transform: scale(1.01);
+}
 
-    body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        position: relative;
-        overflow-x: hidden;
-    }
+.premium-textarea:focus-visible {
+    outline: none;
+    background: #02040a !important;
+}
 
-    /* Animated background particles */
-    body::before {
-        content: '';
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-        animation: particleFloat 15s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    @@keyframes particleFloat {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(30px, -30px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-    }
-
-    .main-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        position: relative;
-        z-index: 1;
-    }
-
-    .content-wrapper {
-        width: 100%;
-        max-width: 900px;
-    }
-
-    /* Header Section */
-    .header-section {
-        text-align: center;
-        margin-bottom: 40px;
-        animation: fadeInDown 0.8s ease-out;
-    }
-
-    @@keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .logo {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        border-radius: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 40px rgba(240, 147, 251, 0.4);
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @@keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .logo svg {
-        width: 45px;
-        height: 45px;
-        fill: white;
-    }
-
-    .main-title {
-        font-size: 3rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 10px;
-        letter-spacing: -1px;
-    }
-
-    .subtitle {
-        font-size: 1.2rem;
-        color: rgba(255, 255, 255, 0.85);
-        font-weight: 300;
-    }
-
-    /* Glass Card */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(20px);
-        border-radius: 30px;
-        padding: 50px;
-        box-shadow: 
-            0 20px 60px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        animation: fadeInUp 0.8s ease-out 0.2s both;
-    }
-
-    @@keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Form Elements */
-    .form-label {
-        color: white;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .input-wrapper {
-        position: relative;
-        margin-bottom: 25px;
-    }
-
-    textarea.form-control {
-        background: rgba(255, 255, 255, 0.95);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 20px;
-        padding: 20px;
-        font-size: 1rem;
-        color: #333;
-        resize: none;
-        height: 220px;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    textarea.form-control:focus {
-        outline: none;
-        border-color: #f093fb;
-        background: white;
-        box-shadow: 0 8px 30px rgba(240, 147, 251, 0.3);
-        transform: translateY(-2px);
-    }
-
-    textarea.form-control::placeholder {
-        color: #999;
-    }
-
-    /* Character Counter */
-    .char-counter {
-        position: absolute;
-        bottom: 15px;
-        right: 20px;
-        color: #666;
-        font-size: 0.85rem;
-        pointer-events: none;
-    }
-
-    /* Submit Button */
-    .btn-submit {
-        width: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        border-radius: 15px;
-        padding: 18px 40px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-submit::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.5s;
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-    }
-
-    .btn-submit:hover::before {
-        left: 100%;
-    }
-
-    .btn-submit:active {
-        transform: translateY(-1px);
-    }
-
-    .btn-submit:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    /* Loader */
-    .loader-container {
-        text-align: center;
-        padding: 30px;
-        margin-top: 20px;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @@keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .loader-spinner {
-        width: 50px;
-        height: 50px;
-        margin: 0 auto 15px;
-        border: 4px solid rgba(255, 255, 255, 0.3);
-        border-top: 4px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @@keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    .loader-text {
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 500;
-    }
-
-    /* Result Box */
-    .result-box {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 30px;
-        margin-top: 30px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.5s ease-out;
-    }
-
-    @@keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .result-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    .result-icon {
-        width: 35px;
-        height: 35px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-    }
-
-    .result-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-    }
-
-    .result-content {
-        color: #444;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-    /* Copy Button */
-    .copy-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        border-radius: 10px;
-        padding: 10px 20px;
-        color: white;
-        cursor: pointer;
-        font-weight: 600;
-        margin-top: 15px;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .copy-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Responsive Design */
-    @@media (max-width: 768px) {
-        .glass-card {
-            padding: 30px 20px;
-            border-radius: 20px;
-        }
-
-        .main-title {
-            font-size: 2rem;
-        }
-
-        .subtitle {
+        .btn-neon {
+            background: linear-gradient(105deg, #10b981, #22c55e);
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 2.5rem;
+            font-weight: 700;
             font-size: 1rem;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px -8px #22c55e80;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-neon:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 35px -12px #2ecc71;
+        }
+        .btn-neon:active {
+            transform: translateY(2px) scale(0.98);
         }
 
-        textarea.form-control {
-            height: 180px;
-            padding: 15px;
+        .result-dark-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            border-left: 5px solid #34d399;
+            transition: all 0.35s;
+            animation: slideGlow 0.5s ease-out;
+            transform: translateY(0);
+        }
+        .result-dark-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-left-width: 6px;
         }
 
-        .btn-submit {
-            padding: 15px 30px;
-            font-size: 1rem;
-        }
-    }
-
-    /* Success Animation */
-    @@keyframes successPulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    .success-animate {
-        animation: successPulse 0.6s ease;
-    }
-</style>
-
-<div class="main-container">
-    <div class="content-wrapper">
-        <!-- Header -->
-        <div class="header-section">
-            <div class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
-            </div>
-            <h1 class="main-title">AI Email Summarizer</h1>
-            <p class="subtitle">Transform lengthy emails into concise summaries instantly</p>
-        </div>
-
-        <!-- Main Card -->
-        <div class="glass-card">
-            <form method="post" id="emailForm">
-                <div class="input-wrapper">
-                    <label class="form-label">
-                        <span>📧</span> Paste Your Email
-                    </label>
-                    <textarea 
-                        class="form-control" 
-                        name="email" 
-                        id="emailInput"
-                        placeholder="Paste your email content here and let AI do the magic..."
-                        required
-                        maxlength="5000"></textarea>
-                    <span class="char-counter" id="charCounter">0 / 5000</span>
-                </div>
-
-                <button class="btn-submit" type="submit" id="submitBtn">
-                    <span id="btnText">✨ Summarize Now</span>
-                </button>
-            </form>
-
-            <!-- Loader -->
-            <div id="loader" class="loader-container" style="display:none;">
-                <div class="loader-spinner"></div>
-                <p class="loader-text">AI is analyzing your email...</p>
-            </div>
-
-            <!-- Result Box -->
-            @if (ViewBag.Result != null)
-            {
-                <div class="result-box" id="resultBox">
-                    <div class="result-header">
-                        <div class="result-icon">✓</div>
-                        <h3 class="result-title">Summary</h3>
-                    </div>
-                    <div class="result-content">@ViewBag.Result</div>
-                    <button class="copy-btn" onclick="copySummary()">
-                        <span>📋</span> Copy Summary
-                    </button>
-                </div>
+        @@keyframes slideGlow {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .copy-btn-sleek {
+            background: rgba(255, 255, 255, 0.05);
+            border: 0.5px solid #2e3a55;
+            border-radius: 2rem;
+            padding: 0.3rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #bfd6ff;
+            transition: all 0.2s;
+        }
+        .copy-btn-sleek:hover {
+            background: #22c55e;
+            color: #03050b;
+            transform: scale(1.05) translateY(-2px);
+        }
+
+        pre {
+            font-family: 'Inter', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            color: #e2e8ff;
+            line-height: 1.6;
+        }
+
+        .loader-futuristic {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            padding: 0.7rem 1.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 0.5px solid #34d39966;
+            animation: subtlePulse 1.8s infinite;
+        }
+
+        @@keyframes subtlePulse {
+            0% { border-color: #34d39933; transform: scale(1); }
+            50% { border-color: #34d399cc; transform: scale(1.01); }
+            100% { border-color: #34d39933; transform: scale(1); }
+        }
+
+        .pulse-ring {
+            width: 24px;
+            height: 24px;
+            border: 2.5px solid #2c3e50;
+            border-top-color: #34d399;
+            border-radius: 50%;
+            animation: spinLoad 0.7s linear infinite;
+        }
+
+        @@keyframes spinLoad {
+            to { transform: rotate(360deg); }
+        }
+
+        .typing-dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #34d399;
+            animation: blink 1.2s infinite;
+        }
+
+        @@keyframes blink {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .loading-progress {
+            height: 2px;
+            background: linear-gradient(90deg, #22c55e, #a3e635);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        footer span {
+            font-size: 0.7rem;
+            color: #5a6a8c;
+        }
+        @@media (max-width: 768px) {
+            .premium-gradient { font-size: 2rem; }
+            .lux-card { padding: 1.2rem !important; }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 10px; }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="stars"></div>
+
+<div class="container py-4 py-md-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-7">
+            <div class="text-center mb-5">
+                <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                    <span class="badge-dark-glow"><i class="fas fa-microchip me-1"></i> AI Core</span>
+                    <span class="badge-dark-glow"><i class="fas fa-bolt me-1"></i> Lightning Fast</span>
+                    <span class="badge-dark-glow"><i class="fas fa-gem me-1"></i> Pro Dark</span>
+                </div>
+                <h1 class="premium-gradient mb-3">✧ AI Email Summarizer ✧</h1>
+                <p class="opacity-75">Advanced AI that turns long emails into crisp, actionable summaries in seconds</p>
+            </div>
+
+            <div class="lux-card p-4 p-md-5">
+                <form id="summarizerForm" method="post">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold"><i class="fas fa-envelope-open-text text-success"></i> Email content</label>
+                        <textarea id="emailMessage" name="email" class="form-control premium-textarea" rows="7" placeholder="📧 Paste your email here..."></textarea>
+                        <div class="d-flex justify-content-between mt-2">
+                            <small><i class="fas fa-robot"></i> AI extracts key points, action items & tone</small>
+                            <small id="charCounterLive">0 characters</small>
+                        </div>
+                    </div>
+                    <button type="submit" id="submitButton" class="btn-neon w-100 py-3">
+                        <i class="fas fa-wand-magic me-2"></i> Summarize Now
+                    </button>
+                </form>
+
+                <div id="neonLoader" class="text-center mt-4" style="display: none;">
+                    <div class="loader-futuristic">
+                        <div class="pulse-ring"></div>
+                        <span>AI is analyzing your email... <span class="typing-dot"></span><span class="typing-dot" style="animation-delay:0.2s"></span><span class="typing-dot" style="animation-delay:0.4s"></span></span>
+                    </div>
+                    <div class="loading-progress mt-3 mx-auto" style="width: 70%; max-width: 200px;"></div>
+                </div>
+
+                <div id="resultContainer" style="display: none;" class="mt-5">
+                    <div class="result-dark-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-crown text-success me-2"></i> ✦ Smart Summary</h5>
+                            <button id="copySummaryBtn" class="copy-btn-sleek"><i class="far fa-copy me-1"></i> Copy summary</button>
+                        </div>
+                        <pre id="summaryTextDisplay">Preparing summary...</pre>
+                    </div>
+                </div>
+
+                @if (ViewBag.Result != null)
+                {
+                    <div id="legacyStaticResult" class="result-dark-card p-4 mt-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-brain me-2"></i> Previous summary</h5>
+                            <button id="legacyCopyBtn" class="copy-btn-sleek">Copy</button>
+                        </div>
+                        <pre>@ViewBag.Result</pre>
+                    </div>
+                }
+            </div>
+            <div class="text-center mt-4">
+                <span><i class="fas fa-shield-alt me-1"></i> Secure processing · Powered by next‑gen AI</span>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Character Counter
-    const emailInput = document.getElementById('emailInput');
-    const charCounter = document.getElementById('charCounter');
+    (function() {
+        const form = document.getElementById('summarizerForm');
+        const emailField = document.getElementById('emailMessage');
+        const submitBtn = document.getElementById('submitButton');
+        const loader = document.getElementById('neonLoader');
+        const resultBox = document.getElementById('resultContainer');
+        const summaryPre = document.getElementById('summaryTextDisplay');
+        const copyBtn = document.getElementById('copySummaryBtn');
+        const legacyDiv = document.getElementById('legacyStaticResult');
+        const charSpan = document.getElementById('charCounterLive');
 
-    emailInput.addEventListener('input', function() {
-        const length = this.value.length;
-        charCounter.textContent = `${length} / 5000`;
-    });
-
-    // Form Submit Handler
-    const form = document.getElementById('emailForm');
-    const loader = document.getElementById('loader');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-
-    form.addEventListener('submit', function() {
-        loader.style.display = 'block';
-        submitBtn.disabled = true;
-        btnText.textContent = '⏳ Processing...';
-    });
-
-    // Copy Summary Function
-    function copySummary() {
-        const resultContent = document.querySelector('.result-content');
-        const text = resultContent.textContent;
-        
-        navigator.clipboard.writeText(text).then(function() {
-            const copyBtn = document.querySelector('.copy-btn');
-            const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<span>✓</span> Copied!';
-            copyBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-            
-            setTimeout(function() {
-                copyBtn.innerHTML = originalHTML;
-                copyBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-            }, 2000);
-        });
-    }
-
-    // Add success animation when result appears
-    window.addEventListener('load', function() {
-        const resultBox = document.getElementById('resultBox');
-        if (resultBox) {
-            resultBox.classList.add('success-animate');
+        function updateChar() {
+            charSpan.innerText = emailField.value.length + ' characters';
         }
-    });
+        emailField.addEventListener('input', updateChar);
+        updateChar();
 
-    // Auto-resize textarea
-    emailInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 400) + 'px';
-    });
+        function hideLegacy() {
+            if (legacyDiv) legacyDiv.style.display = 'none';
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const content = summaryPre.innerText;
+                if (content && content !== 'Preparing summary...' && !content.startsWith('⚠️') && !content.startsWith('❌')) {
+                    navigator.clipboard.writeText(content).then(() => {
+                        const original = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                        setTimeout(() => { copyBtn.innerHTML = original; }, 2000);
+                    }).catch(() => alert('Could not copy'));
+                } else {
+                    alert('No valid summary to copy yet.');
+                }
+            });
+        }
+
+        const legacyCopy = document.getElementById('legacyCopyBtn');
+        if (legacyCopy) {
+            legacyCopy.addEventListener('click', () => {
+                const oldPre = legacyDiv.querySelector('pre');
+                if (oldPre) navigator.clipboard.writeText(oldPre.innerText);
+                legacyCopy.innerHTML = 'Done!';
+                setTimeout(() => legacyCopy.innerHTML = 'Copy', 1500);
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailValue = emailField.value.trim();
+            if (!emailValue) {
+                const notify = document.createElement('div');
+                notify.className = 'alert alert-warning mt-3 rounded-4';
+                notify.style.background = 'rgba(250,204,21,0.15)';
+                notify.style.border = 'none';
+                notify.style.color = '#fde047';
+                notify.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i> Please paste an email to summarize.';
+                form.insertAdjacentElement('afterend', notify);
+                setTimeout(() => notify.remove(), 2500);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.style.transform = 'scale(0.98)';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse me-2"></i> AI is thinking...';
+            loader.style.display = 'block';
+            resultBox.style.display = 'none';
+            hideLegacy();
+
+            const progressBar = document.querySelector('.loading-progress');
+            if (progressBar) progressBar.style.width = '30%';
+
+            try {
+                const formData = new FormData();
+                formData.append('email', emailValue);
+                
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                
+                if (progressBar) progressBar.style.width = '80%';
+                
+                // استلام JSON من الـ Controller
+                const data = await response.json();
+                
+                if (response.ok && data.summary) {
+                    summaryPre.innerText = data.summary;
+                    resultBox.style.display = 'block';
+                    resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    summaryPre.innerText = '⚠️ Unable to generate summary. The AI service might be temporarily unavailable. Please try again.';
+                    resultBox.style.display = 'block';
+                }
+                if (progressBar) progressBar.style.width = '100%';
+            } catch (err) {
+                console.error(err);
+                summaryPre.innerText = '❌ Network or server error. Check your connection and try again.';
+                resultBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.style.transform = '';
+                submitBtn.innerHTML = '<i class="fas fa-wand-magic me-2"></i> Summarize Now';
+                loader.style.display = 'none';
+                if (progressBar) setTimeout(() => { progressBar.style.width = '0%'; }, 500);
+            }
+        });
+    })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
