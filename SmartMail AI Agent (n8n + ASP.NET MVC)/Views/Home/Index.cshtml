@@ -1,0 +1,102 @@
+﻿@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+@{
+    ViewData["Title"] = "AI Email Summarizer";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+    }
+
+    .glass {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    textarea {
+        height: 200px;
+        resize: none;
+        border-radius: 12px !important;
+    }
+
+    .btn-custom {
+        background: linear-gradient(45deg, #6366f1, #22c55e);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        transform: scale(1.05);
+    }
+
+    .result-box {
+        background: rgba(255,255,255,0.08);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .title {
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+</style>
+
+<div class="container mt-5">
+
+    <div class="text-center mb-4">
+        <h1 class="title">📧 AI Email Summarizer</h1>
+        <p>Paste your email and let AI summarize it instantly</p>
+    </div>
+
+    <div class="glass">
+
+        <form method="post" id="form">
+            <textarea class="form-control mb-3" name="email" placeholder="Paste your email here..."></textarea>
+
+            <button class="btn btn-custom w-100" type="submit">
+                ✨ Summarize Email
+            </button>
+        </form>
+
+        <div id="loader" class="text-center mt-3" style="display:none;">
+            <div class="spinner-border text-success"></div>
+            <p>AI is thinking...</p>
+        </div>
+
+        @if (ViewBag.Result != null)
+        {
+            <div class="result-box mt-4">
+                <h4>📌 Summary:</h4>
+                <pre style="white-space: pre-wrap;">@ViewBag.Result</pre>
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("form");
+    const loader = document.getElementById("loader");
+
+    form.addEventListener("submit", function () {
+        loader.style.display = "block";
+    });
+</script>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMail AI Agent (n8n + ASP.NET MVC)", "SmartMail AI Agent (n8n + ASP.NET MVC)\SmartMail AI Agent (n8n + ASP.NET MVC).csproj", "{D002C5CB-953E-4511-95FB-BB9060B2D46A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D002C5CB-953E-4511-95FB-BB9060B2D46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D002C5CB-953E-4511-95FB-BB9060B2D46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D002C5CB-953E-4511-95FB-BB9060B2D46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D002C5CB-953E-4511-95FB-BB9060B2D46A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08D8985A-4285-40E5-90B5-4794E2DCE188}
+	EndGlobalSection
+EndGlobal
